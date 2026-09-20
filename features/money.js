@@ -1,0 +1,7 @@
+/* ==== 功能：日常开销 START ==== */
+const Money = {
+  render(){const list=Store.list('expenses',(a,b)=>(b.date||'').localeCompare(a.date||'')||(b._u||0)-(a._u||0));const month=Util.today().slice(0,7);const total=list.filter(x=>(x.date||'').startsWith(month)).reduce((s,x)=>s+(Number(x.amount)||0),0);document.getElementById('monthSpend').textContent='¥'+total.toFixed(2);document.getElementById('moneyDate').value=document.getElementById('moneyDate').value||Util.today();document.getElementById('moneyList').innerHTML=list.length?list.slice(0,40).map(x=>`<div class="item"><div class="grow"><span class="strong">${Util.esc(x.category)}</span><div class="meta">${x.date}${x.note?' · '+Util.esc(x.note):''}</div></div><span class="mono">−¥${Number(x.amount).toFixed(2)}</span><button class="del" onclick="Money.del('${x.id}')">✕</button></div>`).join(''):'<div class="empty">还没有开销记录</div>';},
+  add(){const amount=Number(document.getElementById('moneyAmount').value),date=document.getElementById('moneyDate').value;if(!(amount>0)||!date)return UI.toast('请填写正确金额和日期');Store.upsert('expenses',{amount,category:document.getElementById('moneyCategory').value,date,note:document.getElementById('moneyNote').value.trim()});document.getElementById('moneyAmount').value='';document.getElementById('moneyNote').value='';this.render();UI.toast('已记一笔');},
+  del(id){Store.softDelete('expenses',id);this.render();}
+};
+/* ==== 功能：日常开销 END ==== */

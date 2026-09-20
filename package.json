@@ -1,0 +1,9 @@
+{
+  "name": "shentai-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "description": "神台：薄荷白初音未来主题个人学习工作台（Blob 同步版）",
+  "dependencies": {
+    "@edgeone/pages-blob": "latest"
+  }
+}

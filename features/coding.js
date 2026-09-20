@@ -1,0 +1,8 @@
+/* ==== 功能：编程学习 START ==== */
+const Coding = {
+  render(){const order={'学习中':0,'计划中':1,'已完成':2};const list=Store.list('coding_items',(a,b)=>(order[a.status]??9)-(order[b.status]??9));document.getElementById('codeList').innerHTML=list.length?list.map(x=>`<div class="item"><div class="grow"><span class="strong">${Util.esc(x.title)}</span><div class="meta">${Util.esc(x.topic||'未分类')} · ${Util.esc(x.status)}</div>${x.note?`<div class="meta">下一步：${Util.esc(x.note)}</div>`:''}<div class="progress"><i style="width:${x.status==='已完成'?100:x.status==='学习中'?55:15}%"></i></div></div><button class="chip" onclick="Coding.advance('${x.id}')">推进</button><button class="del" onclick="Coding.del('${x.id}')">✕</button></div>`).join(''):'<div class="empty">还没有编程学习项</div>';},
+  add(){const title=document.getElementById('codeTitle').value.trim();if(!title)return UI.toast('先写下学习内容');Store.upsert('coding_items',{title,topic:document.getElementById('codeTopic').value.trim(),status:document.getElementById('codeStatus').value,note:document.getElementById('codeNote').value.trim()});document.getElementById('codeTitle').value='';document.getElementById('codeNote').value='';this.render();},
+  advance(id){const x=Store.list('coding_items').find(v=>v.id===id);if(!x)return;const n=x.status==='计划中'?'学习中':'已完成';Store.upsert('coding_items',{...x,status:n});this.render();},
+  del(id){Store.softDelete('coding_items',id);this.render();}
+};
+/* ==== 功能：编程学习 END ==== */
