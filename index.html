@@ -284,19 +284,32 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
     <section class="page" id="page-money"><div class="page-title">日常开销</div><div class="page-sub">记清楚花在哪里，不给自己压力</div><div class="card"><div class="hero" id="monthSpend">¥0.00</div><p class="hint">本月支出</p></div><div class="card"><h2>记一笔</h2><div class="row"><input id="moneyAmount" type="number" min="0" step="0.01" placeholder="金额"><select id="moneyCategory"><option>学习资料</option><option>餐饮</option><option>交通</option><option>数码</option><option>其他</option></select></div><div class="row" style="margin-top:9px"><input id="moneyDate" type="date"><input id="moneyNote" maxlength="80" placeholder="备注"></div><button class="btn" onclick="Money.add()" style="margin-top:9px">保存</button></div><div class="card wide"><h2>近期记录</h2><div id="moneyList"></div></div></section>
     <!-- ==== 功能：日常开销 END ==== -->
 
-    <!-- ==== 功能：周复盘 START ==== -->
     <section class="page" id="page-recap">
-      <div class="page-title">这一周</div>
-      <div class="page-sub">周日晚上看一眼，比任何提醒都管用</div>
+      <!-- ==== 功能：成就 START ==== -->
+      <div class="page-title">我的成就</div>
+      <div class="page-sub">回头看看，你已经走了很远</div>
       <div class="card wide">
+        <h2><span class="miku-dot cheer"></span>坚持与积累</h2>
+        <div id="achievementHero"></div>
+        <div class="stats" id="achievementStats" style="margin-top:18px"></div>
+      </div>
+      <div class="card wide">
+        <h2>成果徽章</h2>
+        <div id="achievementBadges"></div>
+      </div>
+      <!-- ==== 功能：成就 END ==== -->
+
+      <!-- ==== 功能：周复盘 START ==== -->
+      <div class="card wide">
+        <h2>本周复盘</h2>
         <div id="recapBody"></div>
         <div class="row" style="margin-top:18px">
           <button class="btn" onclick="Recap.makeCard()">生成图卡</button>
         </div>
         <p class="hint">生成一张能存下来的图，想发就发。图上不含你的具体记录内容。</p>
       </div>
+      <!-- ==== 功能：周复盘 END ==== -->
     </section>
-    <!-- ==== 功能：周复盘 END ==== -->
 
     <!-- 设置页是必备的，不要删 -->
     <!-- ==== 功能：设置 START ==== -->
@@ -690,7 +703,7 @@ const App = {
     { id:'words',    icon:'A', name:'单词',  onShow: () => Words.render() },
     { id:'coding',   icon:'⌘', name:'编程',  onShow: () => Coding.render() },
     { id:'money',    icon:'¥', name:'开销',  onShow: () => Money.render() },
-    { id:'recap',    icon:'▥', name:'复盘',  onShow: () => Recap.render() },
+    { id:'recap',    icon:'★', name:'成就',  onShow: () => { Achievements.render(); Recap.render(); } },
     { id:'settings', icon:'⚙', name:'设置',  onShow: () => Settings.render() }
   ],
 
@@ -1033,6 +1046,7 @@ const Recap = {
 <script src="features/words.js"></script>
 <script src="features/coding.js"></script>
 <script src="features/money.js"></script>
+<script src="features/achievements.js"></script>
 <script>App.init();</script>
 </body>
 </html>
