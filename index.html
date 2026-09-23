@@ -114,6 +114,21 @@ body{
 .hint{font-size:var(--fs-meta);color:var(--text-dim);margin-top:8px;line-height:1.6}
 .empty{font-size:var(--fs-meta);color:var(--text-dim);text-align:center;padding:22px 0}
 
+/* ==== 功能：塔菲休闲游戏 START ==== */
+.taffy-card{max-width:680px;align-self:center;width:100%;text-align:center;padding:clamp(18px,4vw,34px)}
+.taffy-stage{position:relative;width:min(100%,480px);aspect-ratio:1;margin:0 auto 18px;border-radius:22px;overflow:hidden;background:#fff0f5;border:1px solid #f2dbe5;box-shadow:0 12px 30px rgba(194,111,145,.12)}
+.taffy-stage img,.taffy-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.taffy-stage video{display:none}
+.taffy-stage.playing video{display:block}
+.taffy-stage.playing .taffy-idle{display:none}
+.taffy-stage.fallback video{display:none}
+.taffy-stage.fallback .taffy-laugh-still{display:block}
+.taffy-laugh-still{display:none}
+.taffy-hit{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer;touch-action:manipulation}
+.taffy-hit:focus-visible{outline:4px solid var(--accent);outline-offset:-5px;border-radius:22px}
+.taffy-card .hint{margin:0}
+/* ==== 功能：塔菲休闲游戏 END ==== */
+
 /* 英雄元素：每页最大的那一个。数字一律等宽，对齐后立刻专业 */
 .hero{font-size:var(--fs-hero);font-weight:500;line-height:1.1;letter-spacing:-.01em}
 .num,.hero{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
@@ -283,6 +298,22 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
     <!-- ==== 功能：日常开销 START ==== -->
     <section class="page" id="page-money"><div class="page-title">日常开销</div><div class="page-sub">记清楚花在哪里，不给自己压力</div><div class="card"><div class="hero" id="monthSpend">¥0.00</div><p class="hint">本月支出</p></div><div class="card"><h2>记一笔</h2><div class="row"><input id="moneyAmount" type="number" min="0" step="0.01" placeholder="金额"><select id="moneyCategory"><option>学习资料</option><option>餐饮</option><option>交通</option><option>数码</option><option>其他</option></select></div><div class="row" style="margin-top:9px"><input id="moneyDate" type="date"><input id="moneyNote" maxlength="80" placeholder="备注"></div><button class="btn" onclick="Money.add()" style="margin-top:9px">保存</button></div><div class="card wide"><h2>近期记录</h2><div id="moneyList"></div></div></section>
     <!-- ==== 功能：日常开销 END ==== -->
+
+    <!-- ==== 功能：塔菲休闲游戏 START ==== -->
+    <section class="page" id="page-taffy">
+      <div class="page-title">塔菲休闲游戏</div>
+      <div class="page-sub">点一点，听塔菲笑一会儿</div>
+      <div class="card taffy-card">
+        <div class="taffy-stage" id="taffyStage">
+          <img class="taffy-idle" src="assets/taffy/idle.png" alt="Q 版塔菲微笑着等待点击">
+          <img class="taffy-laugh-still" src="assets/taffy/laugh-still.png" alt="塔菲笑了">
+          <video id="taffyVideo" src="assets/taffy/laugh.mp4" poster="assets/taffy/laugh-still.png" preload="metadata" muted playsinline></video>
+          <button class="taffy-hit" type="button" aria-label="点击塔菲，播放笑声" onclick="Taffy.play()"></button>
+        </div>
+        <p class="hint" id="taffyHint" aria-live="polite">点击塔菲，听一次糖笑</p>
+      </div>
+    </section>
+    <!-- ==== 功能：塔菲休闲游戏 END ==== -->
 
     <section class="page" id="page-recap">
       <!-- ==== 功能：成就 START ==== -->
@@ -697,11 +728,13 @@ const App = {
     { id:'words',    icon:'A', name:'单词',  onShow: () => Words.render() },
     { id:'coding',   icon:'⌘', name:'编程',  onShow: () => Coding.render() },
     { id:'money',    icon:'¥', name:'开销',  onShow: () => Money.render() },
+    { id:'taffy',    icon:'♡', name:'游戏',  onShow: () => Taffy.render() },
     { id:'recap',    icon:'★', name:'成就',  onShow: () => { Achievements.render(); Recap.render(); } },
     { id:'settings', icon:'⚙', name:'设置',  onShow: () => Settings.render() }
   ],
 
   go(id){
+    if (document.getElementById('page-taffy')?.classList.contains('on') && id !== 'taffy') Taffy.stop();
     document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
     document.getElementById('page-' + id)?.classList.add('on');
     document.querySelectorAll('#nav button').forEach(b =>
@@ -1041,6 +1074,7 @@ const Recap = {
 <script src="features/coding.js"></script>
 <script src="features/money.js"></script>
 <script src="features/achievements.js"></script>
+<script src="features/taffy.js"></script>
 <script>App.init();</script>
 </body>
 </html>
